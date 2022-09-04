@@ -2,6 +2,7 @@
 print "Content-type: text/html; charset=UTF-8\n\n";
 
 use CGI;
+use DBI;
 use strict;
 use warnings;
 use utf8;
@@ -178,36 +179,45 @@ sub disable_tag_char {
 		return $str;
 }
 
-open(IN, "bbs.txt");
-my @log = <IN>;
-close(IN);
+# DB 接続
+my $dbh = DBI->connect("dbi:SQLite:dbname=msg.db");
+# $dbh->do("create table msg_log(name, message);");
 
+# DB へデータを格納
 if ($message ne "") {
+	# タグの無効化
+	$name = disable_tag_char($name);
+	$message = disable_tag_char($message);
 
-		# タグの無効化
-		$name = disable_tag_char($name);
-		$message = disable_tag_char($message);
+	$message =~ s/\r\n/<br>/g; # Windows系
+	$message =~ s/\r/<br>/g; # Mac系
+	$message =~ s/\n/<br>/g; # Unix系
 
-		$message =~ s/\r\n/<br>/g; # Windows系
-		$message =~ s/\r/<br>/g; # Mac系
-		$message =~ s/\n/<br>/g; # Unix系
+	# デバッグ用 : 直下の処理は実行されるが、insert処理が実行されていないことが分かった。
+	print  "<hr>\n";
+	print "[debug] : $name, $message<br>\n";
 
-		unshift @log, "$name\t$message\n";
-
-		open(OUT, "+<", "bbs.txt");
-		flock(OUT, 2);
-		truncate(OUT, 0);
-		seek(OUT, 0, 0);
-		print OUT @log;
-		close(OUT);
+	$dbh->do("insert into msg_log (name, message) values ($name, $message);");
 }
 
-foreach my $data (@log) {
-		chomp $data;
-		($name, $message) = split(/\t/, $data);
-		print "<hr>\n";
-		print "[$name]<br>$message<br>\n";
+# テーブルの読み出し命令
+my $sth = $dbh->prepare("select * from msg_log");
+$sth->execute;
+
+# 各データを展開し、配列へ格納
+while(my @log = $sth->fetchrow_array) {
+	my ($n, $m) = @log;
+	# chompを使うと正しく表示されない
+	# $n = chomp $n;
+	# $m = chomp $m;
+
+	print "<hr>\n";
+	print "[$n]<br>$m<br>\n";
 }
+$sth->finish;
+undef $sth;
 
 print "</body>\n</html>\n";
 
+# DB 切断
+$dbh->disconnect;
