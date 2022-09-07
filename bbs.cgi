@@ -193,11 +193,10 @@ if ($message ne "") {
 	$message =~ s/\r/<br>/g; # Mac系
 	$message =~ s/\n/<br>/g; # Unix系
 
-	# デバッグ用 : 直下の処理は実行されるが、insert処理が実行されていないことが分かった。
-	print  "<hr>\n";
-	print "[debug] : $name, $message<br>\n";
+	# そのまま変数展開しようとするとうまくいかないため、シングルクォートでくくる
+	my $insert_msg = sprintf ("insert into msg_log (name, message) values (\'%s\', \'%s\');", $name, $message);
 
-	$dbh->do("insert into msg_log (name, message) values ($name, $message);");
+	$dbh->do($insert_msg);
 }
 
 # テーブルの読み出し命令
