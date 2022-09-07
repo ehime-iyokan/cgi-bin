@@ -181,7 +181,7 @@ sub disable_tag_char {
 
 # DB 接続
 my $dbh = DBI->connect("dbi:SQLite:dbname=msg.db");
-# $dbh->do("create table msg_log(name, message);");
+$dbh->do("create table msg_log(name, message);");
 
 # DB へデータを格納
 if ($message ne "") {
