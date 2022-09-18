@@ -120,8 +120,6 @@ print <<'INIT_PAGE';
 <main>
 	<h1 class="visually-hidden">Bootstrap webpage</h1>
 
-	<div class="b-example-divider"></div>
-
 	<header>
 		<div class="px-3 py-2 bg-dark text-white">
 			<div class="container">
@@ -181,7 +179,7 @@ sub disable_tag_char {
 
 # DB 接続
 my $dbh = DBI->connect("dbi:SQLite:dbname=msg.db");
-$dbh->do("create table msg_log(name, message);");
+$dbh->do("create table msg_log(name, message, time);");
 
 # DB へデータを格納
 if ($message ne "") {
@@ -193,8 +191,11 @@ if ($message ne "") {
 	$message =~ s/\r/<br>/g; # Mac系
 	$message =~ s/\n/<br>/g; # Unix系
 
+	# 時間取得
+	my ($sec, $min, $hour, $day, $month, $year, $week, $summer) = localtime(time);
+
 	# そのまま変数展開しようとするとうまくいかないため、シングルクォートでくくる
-	my $insert_msg = sprintf ("insert into msg_log (name, message) values (\'%s\', \'%s\');", $name, $message);
+	my $insert_msg = sprintf ("insert into msg_log (name, message, time) values (\'%s\', \'%s\', datetime('now'));", $name, $message);
 
 	$dbh->do($insert_msg);
 }
@@ -205,13 +206,16 @@ $sth->execute;
 
 # 各データを展開し、配列へ格納
 while(my @log = $sth->fetchrow_array) {
-	my ($n, $m) = @log;
+	my ($n, $m, $t) = @log;
 	# chompを使うと正しく表示されない
 	# $n = chomp $n;
 	# $m = chomp $m;
 
+	# 時間のフォーマット変更 (2022-10-10 → 2022/10/10)
+	$t =~ s/-/\//g;
+
 	print "<hr>\n";
-	print "[$n]<br>$m<br>\n";
+	print "$t<br>[$n]<br>$m<br>\n";
 }
 $sth->finish;
 undef $sth;
