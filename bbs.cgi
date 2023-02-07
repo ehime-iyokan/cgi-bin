@@ -79,6 +79,18 @@ print <<'INIT_PAGE';
 			.bottom{
 				vertical-align:bottom;
 			}
+			.left{
+				text-align: left;
+			}
+			.center{
+				text-align: center;
+			}
+			.right{
+				text-align: right;
+			}
+			.empty_cell {
+				empty-cells: hide;
+			}
 			.icon_bootstrap {
 				vertical-align: -.125em;
 				fill: #7b56b3;
@@ -90,6 +102,12 @@ print <<'INIT_PAGE';
 				fill: #4fc4ff;
 				width: 32px;
 				height: 32px;
+			}
+			table{
+				border-collapse: separate;
+			}
+			p {
+			overflow-wrap: break-word;
 			}
 		</style>
 
@@ -114,60 +132,69 @@ print <<'INIT_PAGE';
 		<path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
 		<path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
 	</symbol>
+	<symbol id="trash" viewBox="0 0 16 16">
+		<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+		<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+	</symbol>
 </svg>
 
 
 <main>
 	<h1 class="visually-hidden">Bootstrap webpage</h1>
-
-	<header>
-		<div class="px-3 py-2 bg-dark text-white">
-			<div class="container">
-				<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-					<a href="#" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-						<svg class="icon_bootstrap me-2" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-						<svg class="icon_perl me-2" role="img" aria-label="Perl"><use xlink:href="#Perl"/></svg>
-						初めての Bootstrap & Perl_CGI webページ
-				</a>
+	<div class="px-3 py-2 bg-dark">
+		<div class="container">
+			<nav class="navbar text-light justify-content-center">
+				<div class="d-flex">
+					<svg class="icon_bootstrap me-2" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+					<svg class="icon_perl me-2" role="img" aria-label="Perl"><use xlink:href="#Perl"/></svg>
+					初めての Bootstrap & Perl_CGI webページ
 				</div>
-			</div>
+			</nav>
 		</div>
+	</div>
 
-		<div clss="px-3 py-2 mb-3">
-			<div class="container d-flex flex-wrap justify-content-center">
-				<form method="post" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" action="bbs.cgi">
-					<table>
-						<tr>
-								<th>名前</th>
-									<td><input type="text" class="form-control" placeholder="名前を入力してください" name="client_name" size="40"></td>
-						</tr>
-						<tr>
-								<th class="top">メッセージ</th>
-								<td><textarea type="text" class="form-control" placeholder="文字を入力してください" name="string_client_entered" size="40" rows="3"></textarea></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td>
-								<button type="submit" class="btn btn-primary">
-									送信 <svg class="submit" width="24" height="24" fill="currentColor"><use xlink:href="#submit"/></svg>
-								</button>
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
+	<div class="px-3 py-2 mb-3">
+		<div class="d-flex flex-nowrap justify-content-center">
+			<form method="post" class="container mb-2" action="bbs.cgi">
+				<div class="row align-items-center mt-1">
+					<div class="col-2">
+						<b>名前</b>
+					</div>
+					<div class="col-10">
+						<input type="text" class="form-control" placeholder="名前を入力してください" name="string_client_name">
+					</div>
+				</div>
+				<div class="row align-items-center mt-1">
+					<div class="col-2">
+						<b>メッセージ</b>
+					</div>
+					<div class="col-10">
+						<textarea type="text" class="form-control" placeholder="文字を入力してください" name="string_client_entered" rows="4"></textarea>
+					</div>
+				</div>
+				<div class="row mt-1">
+					<div class="col-2">
+					</div>
+					<div class="col-10">
+						<button type="submit" class="btn btn-primary">
+						送信 <svg class="submit" width="24" height="24" fill="currentColor"><use xlink:href="#submit"/></svg>
+						</button>
+					</div>
+				</div>
+			</form>
 		</div>
-	</header>
+	</div>
 </main>
+<hr>
 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
-		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 INIT_PAGE
 
 my $query = CGI->new;
-my $name = $query->param('client_name');
+my $name = $query->param('string_client_name');
 my $message = $query->param('string_client_entered');
 
 sub disable_tag_char {
@@ -177,9 +204,9 @@ sub disable_tag_char {
 		return $str;
 }
 
-# DB 接続
+# DB 接続, テーブル作成
 my $dbh = DBI->connect("dbi:SQLite:dbname=msg.db");
-$dbh->do("create table msg_log(name, message, time);");
+$dbh->do("create table msg_log(name, message, time, id);");
 
 # DB へデータを格納
 if ($message ne "") {
@@ -191,12 +218,24 @@ if ($message ne "") {
 	$message =~ s/\r/<br>/g; # Mac系
 	$message =~ s/\n/<br>/g; # Unix系
 
-	# 時間取得
-	my ($sec, $min, $hour, $day, $month, $year, $week, $summer) = localtime(time);
+	# idを設定する (データベースに情報がある → 取得したデータの id の最大値 + 1" を設定する, データベースに情報がない → "1"を設定する)
+	my $id = 1;
+	my $sth_fetchid = $dbh->prepare("select * from msg_log");
+	$sth_fetchid->execute;
+	while (my @row = $sth_fetchid->fetchrow_array) {
+		if (defined $id) {
+			if ($id >= $row[3]) {
+				# 取り出した id の中から最大値 + 1 の値を設定する
+				$id = $row[3] + 1;
+			}
+		} else {
+			# 要素無しのため、何もしない( id は "1" のまま)
+		}
+	}
+	$sth_fetchid->finish;
+	undef $sth_fetchid;
 
-	# そのまま変数展開しようとするとうまくいかないため、シングルクォートでくくる
-	my $insert_msg = sprintf ("insert into msg_log (name, message, time) values (\'%s\', \'%s\', datetime('now'));", $name, $message);
-
+	my $insert_msg = sprintf ("insert into msg_log (name, message, time, id) values ('$name', '$message', datetime('now', 'localtime'), '$id');");
 	$dbh->do($insert_msg);
 }
 
@@ -206,16 +245,36 @@ $sth->execute;
 
 # 各データを展開し、配列へ格納
 while(my @log = $sth->fetchrow_array) {
-	my ($n, $m, $t) = @log;
 	# chompを使うと正しく表示されない
-	# $n = chomp $n;
-	# $m = chomp $m;
+	my ($n, $m, $t, $i) = @log;
 
 	# 時間のフォーマット変更 (2022-10-10 → 2022/10/10)
 	$t =~ s/-/\//g;
 
-	print "<hr>\n";
-	print "$t<br>[$n]<br>$m<br>\n";
+print <<"MESSAGE_BOX";
+<div class="container mb-1 rounded-3" style="border: 2px solid #000000">
+	<div class="row align-items-center">
+		<div class="col-auto">
+			$t
+		</div>
+		<div class="col-auto">
+			by $n
+		</div>
+		<div class="col-auto ms-auto">
+			ID : "$i"
+		</div>
+		<div class="col-auto">
+			<button type="button" class="btn btn-outline-primary mt-1">
+				<svg class="trash" width="20" height="20" fill="currentColor"><use xlink:href="#trash"/></svg>
+			</button>
+		</div>
+	</div>
+	<div class="container mb-2 mt-1" style="border: 2px solid grey">
+		<p>$m</p>
+	</div>
+</div>\n
+MESSAGE_BOX
+
 }
 $sth->finish;
 undef $sth;
