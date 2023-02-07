@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!"C:\xampp\perl\bin\perl.exe"
 print "Content-type: text/html; charset=UTF-8\n\n";
 
 use CGI;
